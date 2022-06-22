@@ -6,50 +6,85 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-    public function index()
-    {
-        return response()->json([
-            'siswas' => Post::all()
-        ]);
+
+
+    public function index(){
+        $post   = Post::all();
+        return view('windows')->with('post', $post);
     }
 
-    public function show(Post $siswa)
+    public function show(Request $request)
     {
-        return response()->json([
-            'siswa' => $siswa
-        ]);
+        return view('windows.create');
     }
-    public function store(Request $request)
+    
+    public function storewin(Request $request)
     {
-        $siswa = Post::create($request->all());
-        return response()->json([
-            'siswa' => $siswa
+        //insert data ke table ubuntu os
+        $client     = new Client();
+        $res = $client->request('POST', 'http://192.168.56.46:8080/api/siswa',[
+            'form_params' => [
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'alamat' => $request->alamat,
+            ]
         ]);
+        $res = json_decode($res->getBody()->getContents());
+
+        // insert data ke table windows os
+        DB::table('mahasiswa')->insert([
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'alamat' => $request->alamat
+        ]);
+
+        // alihkan halaman ke halaman mahasiswa
+        return redirect('/siswa/windows');
+     
     }
-    public function update(Request $request, Post $siswa)
-    {
-        $siswa->update($request->all());
-        return response()->json([
-            'siswa' => $siswa
-        ]);
-    }
-    public function destroy(Post $siswa)
-    {
-        $siswa->delete();
-        return response()->json([
-            'success' => true
-        ]);
-    }
-    public function show_data_to_browser()
-    {
-        $client = new Client();
-        $response =  $client->request('GET', 'http://192.168.56.46:8080/api/siswa/');
-        return response()->json([
-            'siswas' => json_decode($response->getBody()->getContents())
-        ]);
+    public function destroy($id){
+        $client     = new Client();
+        $url        = 'http://192.168.56.46:8080/api/siswa/' . $id;
+        $response   = $client->request('DELETE', $url)->getBody()->getContents();
+        $response   = json_decode($response, true);
+
+        //hapus data di windows os
+        DB::table('mahasiswa')->where('id', $id)->delete();
+
+        return redirect('/siswa/windows');
     }
 
+    public function edit($id){
+        $client     = new Client();
+        $url        = 'http://192.168.56.46:8080/api/siswa/' . $id;
+        $response   = $client->request('GET', $url)->getBody()->getContents();
+        $response   = json_decode($response, true);
+        // dd($response->mahasiswa);
+        return view('windows.edit', [
+            'mahasiswa' => $response['siswa']
+        ]);
+    }
+    public function update(Request $request, $id){
+        $client     = new Client();
+        $url        = 'http://192.168.56.46:8080/api/siswa/' . $id;
+        $response   = $client->request('PUT', $url,[
+            'form_params' => [
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'alamat' => $request->alamat,
+            ]
+        ]);
+        $response   = json_decode($response->getBody()->getContents());
+
+        DB::table('mahasiswa')->where('id', $id)->update([
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'alamat' => $request->alamat
+        ]);
+        return redirect('/siswa/windows');
+    }
 }

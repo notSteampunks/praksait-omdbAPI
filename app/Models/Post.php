@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $table = 'siswa';
+    protected $table = 'mahasiswa';
     protected $guarded = [];
 }
