@@ -22,11 +22,6 @@
                 <td>{{ $mhs['email'] }}</td>
                 <td>{{ $mhs['alamat'] }}</td>
                 <td class="d-flex">
-                    <!-- <form class="inline-block ml-2" action="/siswa/{{ $mhs['id'] }}/edit" method="post">
-                        @csrf
-                        @method('GET')
-                        <button class="btn btn-info text-light">Edit</button>
-                    </form> -->
                     <form class="inline-block ml-2" action="http://192.168.56.46:8080/api/siswa/{{ $mhs['id'] }}"
                         method="post" target="_blank">
                         @csrf
@@ -41,7 +36,7 @@
     <hr>
     <!-- Button Tambah Siswa-->
     <!-- <p align="center"><a href="{{ route('mahasiswa.create') }}" class="btn btn-success">Tambah Siswa</a> -->
-    <p align="center"><a href="/siswa/windows" class="btn btn-primary">Data Siswa Windows OS</a>
+    <p align="center"><a href="/siswa/windows" class="btn btn-primary">Windows OS Student List</a>
 </div>
 
 @endsection

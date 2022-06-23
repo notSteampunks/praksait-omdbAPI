@@ -28,5 +28,4 @@ Route::delete('/siswa/{id}',[PostController::class, 'destroy']);
 Route::get('/siswa/windows/{id}/edit',[PostController::class, 'edit'])->name('windows.edit');
 Route::put('/siswa/windows/{id}/update',[PostController::class, 'update'])->name('windows.update');
 
-
 Route::get('/film', [FilmController::class , 'show']);

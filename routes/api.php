@@ -23,6 +23,5 @@ Route::get('/siswa/{siswa}',[PostController::class, 'show']);
 Route::post('/siswa',[PostController::class, 'store']);
 Route::put('siswa/{siswa}', [PostController::class, 'update']);
 Route::delete('siswa/{siswa}', [PostController::class, 'destroy']);
-
 Route::get('siswa', [PostController::class, 'show_data_to_browser']);
 

@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-
-
     public function index(){
         $post   = Post::all();
         return view('windows')->with('post', $post);
@@ -44,8 +42,8 @@ class PostController extends Controller
 
         // alihkan halaman ke halaman mahasiswa
         return redirect('/siswa/windows');
-     
     }
+
     public function destroy($id){
         $client     = new Client();
         $url        = 'http://192.168.56.46:8080/api/siswa/' . $id;
@@ -68,6 +66,7 @@ class PostController extends Controller
             'mahasiswa' => $response['siswa']
         ]);
     }
+
     public function update(Request $request, $id){
         $client     = new Client();
         $url        = 'http://192.168.56.46:8080/api/siswa/' . $id;
